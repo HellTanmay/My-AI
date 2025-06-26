@@ -25,7 +25,7 @@ function App() {
       { role: "user", text: inputMessage },
     ]);
     try {
-      const res = await fetch("http://localhost:3000/generate", {
+      const res = await fetch("https://my-ai-cso6.vercel.app/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
