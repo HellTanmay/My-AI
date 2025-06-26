@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const generate=require("./AiConfig")
 const app = express()
-app.use(cors({allowedHeaders:"https://vercel.com/ailtanmay12-gmailcoms-projects/my-ai-cso6/GEHq8Ur8Vahm7JvyCw9GqVacXBaw"}))
+app.use(cors( {origin: ["http://localhost:3000", "https://my-ai-cso6.vercel.app"]}))
 
 const port = 3000
 
