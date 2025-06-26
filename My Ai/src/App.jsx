@@ -103,13 +103,22 @@ function App() {
       </div>
 
       {/* Textbox and send button at the bottom */}
-      <div className="border-t border-gray-200 p-4 bg-white absolute bottom-0 right-0 left-0">
+      <div className="border-t border-gray-200 p-4 bg-white absolute bottom-0 right-0 left-0 z-10">
         <div className="flex gap-2">
           <Input
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
+            onFocus={() => {
+              // Scroll to bottom to make input visible above keyboard
+              setTimeout(() => {
+                window.scrollTo({
+                  top: document.body.scrollHeight,
+                  behavior: "smooth",
+                });
+              }, 100);
+            }}
             className="flex-1"
           />
           <Button
