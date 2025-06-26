@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {BotIcon, Send } from "lucide-react";
+import { BotIcon, Send } from "lucide-react";
 
 function App() {
   function getSessionId() {
@@ -18,33 +18,44 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
-
   const handleSendMessage = async () => {
-    if (inputMessage.trim().length===0) return;
-      await setMessages((prev) => [
-        ...prev,
-        { role: "user", text: inputMessage },
-      ]);
-      try {
-        const res = await fetch("http://localhost:3000/generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sessionId: getSessionId(),
-            userMessage: inputMessage,
-          }),
-        });
+    if (inputMessage.trim().length === 0) return;
+    await setMessages((prev) => [
+      ...prev,
+      { role: "user", text: inputMessage },
+    ]);
+    try {
+      const res = await fetch("http://localhost:3000/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: getSessionId(),
+          userMessage: inputMessage,
+        }),
+      });
+      setInputMessage(" ");
+
+      if (res.ok) {
         const data = await res.json();
         return data;
-      } catch (err) {
-        console.log(err.message);
+      } else {
+        throw new Error("Something went wrong");
       }
+    } catch (err) {
+      throw err;
+    }
   };
   const mutation = useMutation({
     mutationFn: handleSendMessage,
     onSuccess: (data) => {
-      setMessages((prev) => [...prev, { role: "ai", text: data.result }]);
-      setInputMessage("");
+      setMessages((prev) => [...prev, { role: "ai", text: data?.result }]);
+    },
+    onError: (err) => {
+      console.log(err);
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", text: "Something went wrong" },
+      ]);
     },
   });
   const handleKeyPress = (e) => {
@@ -54,13 +65,12 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen max-w-4xl mx-auto bg-white">
+    <div className="flex flex-col h-full max-w-4xl mx-auto bg-white p-2 overflow-hidden">
       {/* Title at the top */}
       <div className="bg-blue-600 text-white p-4 text-center flex  justify-center ">
-        <BotIcon/>
+        <BotIcon />
         <h1 className="text-xl font-semibold ml-3">My AI</h1>
       </div>
-
       {/* Chat body section at the center */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
         <div className="space-y-4">
@@ -82,11 +92,18 @@ function App() {
               </div>
             </div>
           ))}
+          {mutation.isPending && (
+            <div className="flex">
+              <div className="text-5xl animate-ping">.</div>
+              <div className="text-5xl animate-ping delay-200">.</div>
+              <div className="text-5xl animate-ping delay-400">.</div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Textbox and send button at the bottom */}
-      <div className="border-t border-gray-200 p-4 bg-white">
+      <div className="border-t border-gray-200 p-4 bg-white ">
         <div className="flex gap-2">
           <Input
             value={inputMessage}
@@ -97,9 +114,8 @@ function App() {
           />
           <Button
             onClick={() => mutation.mutate()}
-            disabled={inputMessage.trim().length===0}
+            disabled={inputMessage.trim().length === 0}
             className="bg-blue-600 hover:bg-blue-700"
-            
           >
             <Send className="h-4 w-4" />
           </Button>

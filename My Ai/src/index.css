@@ -2,8 +2,14 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+html,
+body,
+#root{
+  height: 100dvh;
+}
 
 :root {
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
