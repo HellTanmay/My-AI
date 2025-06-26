@@ -65,7 +65,7 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto bg-white p-2 overflow-hidden">
+    <div className="flex flex-col h-full max-w-4xl mx-auto bg-white p-2 overflow-hidden relative">
       {/* Title at the top */}
       <div className="bg-blue-600 text-white p-4 text-center flex  justify-center ">
         <BotIcon />
@@ -103,7 +103,7 @@ function App() {
       </div>
 
       {/* Textbox and send button at the bottom */}
-      <div className="border-t border-gray-200 p-4 bg-white ">
+      <div className="border-t border-gray-200 p-4 bg-white absolute bottom-0 right-0 left-0">
         <div className="flex gap-2">
           <Input
             value={inputMessage}
