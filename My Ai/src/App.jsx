@@ -65,7 +65,7 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto bg-white p-2 overflow-hidden relative">
+    <div className="flex flex-col h-[100dvh] max-w-4xl mx-auto bg-white p-2 overflow-hidden relative">
       {/* Title at the top */}
       <div className="bg-blue-600 text-white p-4 text-center flex  justify-center ">
         <BotIcon />
