@@ -1,6 +1,6 @@
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BotIcon, Send } from "lucide-react";
@@ -24,6 +24,8 @@ function App() {
       ...prev,
       { role: "user", text: inputMessage },
     ]);
+      setInputMessage(" ");
+//
     try {
       const res = await fetch("https://my-ai-i247.onrender.com/generate", {
         method: "POST",
@@ -33,7 +35,6 @@ function App() {
           userMessage: inputMessage,
         }),
       });
-      setInputMessage(" ");
 
       if (res.ok) {
         const data = await res.json();
@@ -51,7 +52,7 @@ function App() {
       setMessages((prev) => [...prev, { role: "ai", text: data?.result }]);
     },
     onError: (err) => {
-      console.log(err);
+      
       setMessages((prev) => [
         ...prev,
         { role: "ai", text: "Something went wrong" },
@@ -65,6 +66,7 @@ function App() {
   };
 
   return (
+   
     <div className="flex flex-col h-[100dvh] max-w-4xl mx-auto bg-white p-2 overflow-hidden relative">
       {/* Title at the top */}
       <div className="bg-blue-600 text-white p-4 text-center flex  justify-center ">
@@ -102,8 +104,10 @@ function App() {
         </div>
       </div>
 
-      {/* Textbox and send button at the bottom */}
-      <div className="border-t border-gray-200 p-4 bg-white z-10">
+      
+   
+    {/* Textbox and send button at the bottom */}
+      <div className="input-wrapper  bg-white border-t p-4 z-50 sm: {fixed left-0 right-0 bottom-0} ">
         <div className="flex gap-2">
           <Input
             value={inputMessage}
@@ -119,7 +123,7 @@ function App() {
                 });
               }, 100);
             }}
-            className="flex-1"
+            className=""
           />
           <Button
             onClick={() => mutation.mutate()}

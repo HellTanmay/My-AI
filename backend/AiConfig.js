@@ -1,5 +1,5 @@
-const { GoogleGenAI, Chat } = require("@google/genai");
-const { response } = require("express");
+const { GoogleGenAI } = require("@google/genai");
+
 
 const ai = new GoogleGenAI({
   apiKey: process.env.API_KEY, 
